@@ -51,7 +51,7 @@ textarea {{width: 50%; height: 5em}}
 <body>
 <h1>ftfy - fix unicode that's broken in various ways</h1>
 <p>Paste in some unicode text that appears to be broken and this tool will use the <a href="https://github.com/LuminosoInsight/python-ftfy">ftfy Python library</a> to try and fix it.</p>
-<form action="/">
+<form action="/" method="POST">
     <p>
         <textarea name="s" rows="3" cols="30">{s}</textarea>
     </p>
@@ -103,9 +103,16 @@ def steps_to_python(s, steps):
 
 
 async def homepage(request):
-    s = request.query_params.getlist("s")
+    if request.method == "GET":
+        s = request.query_params.getlist("s")
+        if s:
+            s = s[0].strip()
+        else:
+            s = None
+    else:
+        form = await request.form()
+        s = form.get('s')
     if s:
-        s = s[0].strip()
         fixed, steps = fix_encoding_and_explain(s)
         return HTMLResponse(
             INDEX.format(
