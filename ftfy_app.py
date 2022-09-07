@@ -128,4 +128,4 @@ async def homepage(request):
         )
 
 
-app = Starlette(debug=False, routes=[Route("/", homepage),])
+app = Starlette(debug=False, routes=[Route("/", homepage, methods=["GET", "POST"]),])
