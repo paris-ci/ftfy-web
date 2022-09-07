@@ -84,7 +84,7 @@ def steps_to_python(s, steps):
     lines = []
     has_sloppy = False
     extra_imports = set()
-    for method, encoding, _ in steps:
+    for method, encoding in steps:
         if method == "transcode":
             extra_imports.add(encoding)
             line = "s = {}(s)".format(encoding)
